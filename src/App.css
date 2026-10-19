@@ -1,0 +1,192 @@
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1c2230;
+  --muted: #5d6677;
+  --border: #d9dde5;
+  --accent: #2f5bea;
+  --accent-text: #ffffff;
+  --typed: #1f8a4c;
+  --typed-bg: #e3f5ea;
+  --next: #f5c518;
+  --paused: #f08c2a;
+  --resume: #1f8a4c;
+
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171d;
+    --surface: #1c2028;
+    --text: #e6e9ef;
+    --muted: #9aa3b2;
+    --border: #2e3440;
+    --accent: #5b82ff;
+    --typed: #5fd38d;
+    --typed-bg: #173323;
+    --resume: #2fa565;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100vh;
+  padding: 16px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.status {
+  margin: 4px 0 0;
+  color: var(--muted);
+  min-height: 1.4em;
+}
+
+.text {
+  flex: 1;
+  min-height: 140px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: 14px/1.55 ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  resize: none;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.text:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.progress-view .typed {
+  color: var(--typed);
+  background: var(--typed-bg);
+}
+
+.progress-view .next {
+  background: var(--next);
+  color: #1c2230;
+  border-radius: 2px;
+}
+
+.progress-view .next.paused {
+  background: var(--paused);
+}
+
+.progress-view .outside {
+  opacity: 0.4;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats progress {
+  flex: 1;
+  height: 8px;
+  accent-color: var(--typed);
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slider input {
+  accent-color: var(--accent);
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px 16px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.toggle input {
+  accent-color: var(--accent);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+button.primary {
+  flex: 1;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+button.primary.resume {
+  background: var(--resume);
+  border-color: var(--resume);
+}
+
+button.link {
+  border: none;
+  background: none;
+  color: var(--accent);
+  padding: 0;
+  text-align: left;
+}
+
+kbd {
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 0.18);
+  font: 12px ui-monospace, monospace;
+}
