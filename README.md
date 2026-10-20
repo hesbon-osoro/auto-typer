@@ -50,6 +50,12 @@ pnpm test:engine      # typing engine tests (no display needed)
 pnpm tauri build      # installer for this OS
 ```
 
+### Troubleshooting
+
+**`symbol lookup error: … libpthread.so.0: undefined symbol: __libc_pthread_init`** when the app starts. This happens when the terminal belongs to a snap app, such as the VS Code snap on Ubuntu. Snap apps export variables like `GTK_PATH` that point at libraries built for the snap's own older glibc, and GTK then loads them into the app. `pnpm tauri …` goes through [`scripts/tauri.mjs`](scripts/tauri.mjs), which removes those variables and restores the originals VS Code saved, so the standard commands work. If you run the binary directly, use a normal terminal or `env -u GTK_PATH ./target/debug/auto-typer`.
+
+**Blank page or "Typing needs the desktop app"** in a browser. The Vite URL that `pnpm tauri dev` prints serves only the UI. Typing needs the window that `pnpm tauri dev` opens.
+
 ### How the code is organised
 
 | Path | What's in it |
