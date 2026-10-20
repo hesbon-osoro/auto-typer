@@ -45,7 +45,8 @@ Then:
 ```sh
 pnpm install
 pnpm tauri dev        # run the app
-pnpm test             # typing engine tests (no display needed)
+pnpm test             # UI tests (vitest + jsdom)
+pnpm test:engine      # typing engine tests (no display needed)
 pnpm tauri build      # installer for this OS
 ```
 
