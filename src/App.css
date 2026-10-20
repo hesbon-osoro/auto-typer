@@ -190,3 +190,8 @@ kbd {
   background: rgb(255 255 255 / 0.18);
   font: 12px ui-monospace, monospace;
 }
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
