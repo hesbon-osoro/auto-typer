@@ -3,6 +3,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import * as settingsStore from "./lib/settings";
 import {
   chars,
+  inDesktopApp,
   normalize,
   onStatus,
   pauseTyping,
@@ -21,6 +22,9 @@ interface Run {
   end: number;
 }
 
+const NOT_DESKTOP =
+  "Typing needs the desktop app. Run `pnpm tauri dev` and use the window it opens, not this browser tab.";
+
 const PAUSE_MESSAGES: Record<PauseReason, string> = {
   escape: "Paused: you pressed Esc.",
   click: "Paused: you clicked. Put the cursor back where typing should continue, then Resume.",
@@ -36,6 +40,7 @@ function App() {
   const [run, setRun] = useState<Run | null>(null);
   const [error, setError] = useState<string | null>(null);
   const textArea = useRef<HTMLTextAreaElement>(null);
+  const desktop = inDesktopApp();
 
   const text = useMemo(() => normalize(s.text), [s.text]);
   const textChars = useMemo(() => chars(text), [text]);
@@ -44,10 +49,12 @@ function App() {
   useEffect(() => settingsStore.save(s), [s]);
 
   useEffect(() => {
+    if (!desktop) return;
     getCurrentWindow().setAlwaysOnTop(s.alwaysOnTop).catch(() => {});
-  }, [s.alwaysOnTop]);
+  }, [desktop, s.alwaysOnTop]);
 
   useEffect(() => {
+    if (!desktop) return;
     const unlisten = onStatus((st) => {
       setStatus(st);
       if (st.state === "done") {
@@ -57,7 +64,7 @@ function App() {
     return () => {
       void unlisten.then((f) => f());
     };
-  }, []);
+  }, [desktop]);
 
   const active = status.state === "waiting" || status.state === "typing" || status.state === "paused";
   const typoRate = s.typoPercent / 100;
@@ -68,6 +75,7 @@ function App() {
   }, [s.wpm, typoRate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function start() {
+    if (!desktop) return;
     setError(null);
     const el = textArea.current;
     // Highlighted text: type only that part.
@@ -125,7 +133,7 @@ function App() {
       <header className="header">
         <h1>Auto Typer</h1>
         <p className="status" role="status">
-          {statusLine(status, error)}
+          {desktop ? statusLine(status, error) : NOT_DESKTOP}
         </p>
       </header>
 
@@ -187,7 +195,7 @@ function App() {
 
       <footer className="actions">
         {!active && (
-          <button className="primary" onClick={() => void start()}>
+          <button className="primary" onClick={() => void start()} disabled={!desktop}>
             Start typing <kbd>Ctrl+Enter</kbd>
           </button>
         )}

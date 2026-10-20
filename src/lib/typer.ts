@@ -1,6 +1,12 @@
 // Bridge to the Rust typist: commands out, status events in.
-import { invoke } from "@tauri-apps/api/core";
+import { invoke, isTauri } from "@tauri-apps/api/core";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";
+
+/**
+ * True inside the Tauri webview. False in a normal browser tab on the dev server (or in tests),
+ * where every Tauri API throws, some of them synchronously before a promise exists.
+ */
+export const inDesktopApp = (): boolean => isTauri();
 
 export interface PlanConfig {
   wpm: number;
